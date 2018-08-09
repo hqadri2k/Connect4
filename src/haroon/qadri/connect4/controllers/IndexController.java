@@ -4,8 +4,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 
 public class IndexController {
-	
-	int[][] board = new int[9][8];
 
 	@FXML
 	private Button playHuman;
@@ -13,5 +11,9 @@ public class IndexController {
 	private Button playAI;
 	@FXML
 	private Button about;
+	
+	@FXML
+	private void playHumanGame() {
+	}
 	
 }

@@ -1,5 +1,6 @@
 package haroon.qadri.connect4;
 
+import haroon.qadri.connect4.controllers.GameBoardController;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -7,15 +8,24 @@ import javafx.stage.Stage;
 
 public class Launcher extends Application {
 	
-	private Core core;
+	private static Core core;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		setup();
-		NodeControllerPair ncp = core.loadScene(Config.INDEX);
-		primaryStage.setWidth(800);
-		primaryStage.setHeight(600);
-		primaryStage.setScene(new Scene((Parent) ncp.getNode(), 800, 600)); 
+		core = new Core(primaryStage);
+		NodeControllerPair ncp = core.loadScene(Config.GAME_BOARD);
+		primaryStage.setWidth(Config.WIDTH);
+		primaryStage.setHeight(Config.HEIGHT);
+		Scene scene = new Scene((Parent) ncp.getNode(), 900, 800);
+		GameBoardController gbc = (GameBoardController) ncp.getController();
+		primaryStage.setScene(scene); 
+		primaryStage.setTitle("Connect 4");
+		primaryStage.setResizable(false);
+		String css = this.getClass().getResource("/stylesheet.css").toExternalForm(); 
+		scene.getStylesheets().add(css);
+		/*NodeControllerPair ncp2 = core.loadScene(Config.INDEX);
+		MainController mc = (MainController) ncp.getController();
+		mc.getMainPane().getChildren().add(ncp2.getNode());*/
 		primaryStage.show();
 	}
 	
@@ -23,8 +33,7 @@ public class Launcher extends Application {
 		launch(args);
 	}
 	
-	private void setup() {
-		core = new Core();
-		core.newGame(true);
+	public static Core getCore() {
+		return core;
 	}
 }

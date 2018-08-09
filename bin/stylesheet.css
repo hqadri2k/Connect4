@@ -1,0 +1,4 @@
+.board  {
+  -fx-background-image: url("tile.png");
+  -fx-background-repeat: repeat;
+}

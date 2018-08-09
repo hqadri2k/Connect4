@@ -10,7 +10,7 @@
    <center>
       <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="30.0" BorderPane.alignment="TOP_CENTER">
          <children>
-            <Button fx:id="playHuman" mnemonicParsing="false" prefHeight="35.0" prefWidth="225.0" text="Play Hooman">
+            <Button fx:id="playHuman" mnemonicParsing="false" onAction="#playHumanGame" prefHeight="35.0" prefWidth="225.0" text="Play Hooman">
                <font>
                   <Font name="Comic Sans MS" size="23.0" />
                </font>
