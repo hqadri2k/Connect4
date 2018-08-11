@@ -29,7 +29,9 @@ public class GameBoard {
 			if(board[i][col] == EMPTY) {
 				board[i][col] = (redTurn ? RED:YELLOW);
 				incrementCounters();
-				checkWon(i, col);
+				if(checkWon(i, col)) {
+					System.out.println("Won");
+				}
 				redTurn = (redTurn ? false:true);
 				printBoard();
 				return i;
@@ -60,22 +62,150 @@ public class GameBoard {
 	}
 	
 	private boolean checkPatterns(int row, int col) {
-		checkHorizontal(row,col);
-		return false;
+		return(checkHorizontal(row, col) || checkVertical(row, col) || checkDiagonal(row, col));
 	}
 	
 	private boolean checkHorizontal(int row, int col) {
-		char[] rowArray = board[row];
+		char placed = board[row][col];
+		int count = 1;
+		int tempCol = col;
+		boolean right = true;
+		boolean left = true;
+		while(right && tempCol < this.col-1) {
+			tempCol++;
+			if(board[row][tempCol] == placed) {
+				count++;
+				if(count == 4) {
+					return true;
+				}
+			} else {
+				right = false;
+			}
+		}
+		tempCol = col;
+		while(left && tempCol > 0) {
+			tempCol--;
+			if(board[row][tempCol] == placed) {
+				count++;
+				if(count == 4) {
+					return true;
+				}
+			} else {
+				right = false;
+			}
+		}
 		return false;
 	}
 	
 	private boolean checkVertical(int row, int col) {
+		char placed = board[row][col];
+		int count = 1;
+		int tempRow = row;
+		boolean up = true;
+		boolean down = true;
+		while(up && tempRow > 0) {
+			tempRow--;
+			if(board[tempRow][col] == placed) {
+				count++;
+				if(count == 4) {
+					return true;
+				}
+			} else {
+				up = false;
+			}
+		}
+		tempRow = row;
+		while(down && tempRow < this.row-1) {
+			tempRow++;
+			if(board[tempRow][col] == placed) {
+				count++;
+				if(count == 4) {
+					return true;
+				}
+			} else {
+				down = false;
+			}
+		}
 		return false;
 	}
 	
-	private boolean checkDiagonal() {
+	private boolean checkDiagonal(int row, int col) {
+		return(checkTopLeftAndBottomRight(row, col) || checkTopRightAndBottomLeft(row, col));
+	}
+	
+	private boolean checkTopLeftAndBottomRight(int row, int col) {
+		char placed = board[row][col];
+		int tempRow = row;
+		int tempCol = col;
+		int count = 1;
+		boolean topLeft = true;
+		boolean botRight = true;
+		while(topLeft && tempRow > 0 && tempCol > 0) {
+			tempRow--;
+			tempCol--;
+			if(board[tempRow][tempCol] == placed) {
+				count++;
+				if(count == 4) {
+					return true;
+				}
+			} else {
+				topLeft = false;
+			}
+		}
+		tempRow = row;
+		tempCol = col;
+		while(botRight && tempRow < this.row-1 && tempCol < this.col-1) {
+			tempRow++;
+			tempCol++;
+			if(board[tempRow][tempCol] == placed) {
+				count++;
+				if(count == 4) {
+					return true;
+				}
+			} else {
+				botRight = false;
+			}
+		}
 		return false;
 	}
+	
+	private boolean checkTopRightAndBottomLeft(int row, int col) {
+		char placed = board[row][col];
+		int tempRow = row;
+		int tempCol = col;
+		int count = 1;
+		boolean topRight = true;
+		boolean botLeft = true;
+		while(topRight && tempRow > 0 && tempCol < col-1) {
+			tempRow--;
+			tempCol++;
+			if(board[tempRow][tempCol] == placed) {
+				count++;
+				if(count == 4) {
+					return true;
+				}
+			} else {
+				topRight = false;
+			}
+		}
+		tempRow = row;
+		tempCol = col;
+		while(botLeft && tempRow < this.row-1 && tempCol > 0) {
+			tempRow++;
+			tempCol--;
+			if(board[tempRow][tempCol] == placed) {
+				count++;
+				if(count == 4) {
+					return true;
+				}
+			} else {
+				botLeft = false;
+			}
+		}
+		return false;
+	}
+	
+	
 	
 	private void setupBoard() {
 		for(int i=0; i<row; i++) {
