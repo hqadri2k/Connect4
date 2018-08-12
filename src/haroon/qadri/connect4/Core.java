@@ -15,12 +15,6 @@ public class Core {
 		this.stage = stage;
 	}
 	
-	public void newGame(boolean human) {
-		GameBoard gb = new GameBoard();
-		NodeControllerPair ncp = loadScene(Config.GAME_BOARD);
-		GameBoardController gbc = (GameBoardController) ncp.getController();
-		}
-	
 	public NodeControllerPair loadScene(String name) {
 		FXMLLoader loader = new FXMLLoader();
 		Node node = null;

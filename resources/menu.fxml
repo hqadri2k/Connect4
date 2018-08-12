@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+
+<AnchorPane focusTraversable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="640.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="haroon.qadri.connect4.controllers.MenuController">
+   <children>
+      <VBox alignment="CENTER" layoutX="50.0" layoutY="50.0" prefHeight="540.0" prefWidth="540.0" spacing="5.0">
+         <children>
+            <Button fx:id="playHuman" mnemonicParsing="false" onAction="#newGame" prefHeight="35.0" prefWidth="300.0" text="Play Human" />
+            <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="300.0" text="Play AI" />
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

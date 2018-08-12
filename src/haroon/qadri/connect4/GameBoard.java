@@ -1,5 +1,7 @@
 package haroon.qadri.connect4;
 
+import haroon.qadri.connect4.controllers.GameBoardController;
+
 public class GameBoard {
 	
 	final char RED = 'R';
@@ -12,10 +14,14 @@ public class GameBoard {
 	int yellowCounters;
 	
 	char[][] board;
-	int col = 7;
-	int row = 7;
 	
-	public GameBoard() {
+	int col = Config.COLS;
+	int row = Config.ROWS;
+	
+	GameBoardController gbc;
+	
+	public GameBoard(GameBoardController gbc) {
+		this.gbc = gbc;
 		board = new char[row][col];
 		setupBoard();
 		printBoard();
@@ -30,10 +36,19 @@ public class GameBoard {
 				board[i][col] = (redTurn ? RED:YELLOW);
 				incrementCounters();
 				if(checkWon(i, col)) {
-					System.out.println("Won");
+					gbc.endGame();
+					if(redTurn) {
+						System.out.println("RED WON");
+					} else {
+						System.out.println("YELLOW WON");
+					}
+						
+				}
+				if(isFull()) {
+					gbc.endGame();
 				}
 				redTurn = (redTurn ? false:true);
-				printBoard();
+				//printBoard();
 				return i;
 			}
 		}
@@ -49,25 +64,21 @@ public class GameBoard {
 	}
 	
 	private boolean checkWon(int row, int col) {
-		if(redTurn) {
-			if(redCounters >= 4) {
-				return checkPatterns(row, col);
-			}
-		} else {
-			if(yellowCounters >= 4) {
-				return checkPatterns(row, col);
-			}
+		if(redTurn && redCounters >= 4) {
+			return checkPatterns(row, col);
+		} else if(yellowCounters >= 4) {
+			return checkPatterns(row, col);
 		}
 		return false;
 	}
 	
 	private boolean checkPatterns(int row, int col) {
-		return(checkHorizontal(row, col) || checkVertical(row, col) || checkDiagonal(row, col));
+		char placed = board[row][col];
+		final int COUNT = 1;
+		return(checkHorizontal(placed, row, col, COUNT) || checkVertical(placed, row, col, COUNT) || checkDiagonal(placed, row, col, COUNT));
 	}
 	
-	private boolean checkHorizontal(int row, int col) {
-		char placed = board[row][col];
-		int count = 1;
+	private boolean checkHorizontal(char placed, int row, int col, int count) {
 		int tempCol = col;
 		boolean right = true;
 		boolean left = true;
@@ -91,15 +102,13 @@ public class GameBoard {
 					return true;
 				}
 			} else {
-				right = false;
+				left = false;
 			}
 		}
 		return false;
 	}
 	
-	private boolean checkVertical(int row, int col) {
-		char placed = board[row][col];
-		int count = 1;
+	private boolean checkVertical(char placed, int row, int col, int count) {
 		int tempRow = row;
 		boolean up = true;
 		boolean down = true;
@@ -129,15 +138,13 @@ public class GameBoard {
 		return false;
 	}
 	
-	private boolean checkDiagonal(int row, int col) {
-		return(checkTopLeftAndBottomRight(row, col) || checkTopRightAndBottomLeft(row, col));
+	private boolean checkDiagonal(char placed, int row, int col, int count) {
+		return(checkTopLeftAndBottomRight(placed, row, col, count) || checkTopRightAndBottomLeft(placed, row, col, count));
 	}
 	
-	private boolean checkTopLeftAndBottomRight(int row, int col) {
-		char placed = board[row][col];
+	private boolean checkTopLeftAndBottomRight(char placed, int row, int col, int count) {
 		int tempRow = row;
 		int tempCol = col;
-		int count = 1;
 		boolean topLeft = true;
 		boolean botRight = true;
 		while(topLeft && tempRow > 0 && tempCol > 0) {
@@ -169,11 +176,9 @@ public class GameBoard {
 		return false;
 	}
 	
-	private boolean checkTopRightAndBottomLeft(int row, int col) {
-		char placed = board[row][col];
+	private boolean checkTopRightAndBottomLeft(char placed, int row, int col, int count) {
 		int tempRow = row;
 		int tempCol = col;
-		int count = 1;
 		boolean topRight = true;
 		boolean botLeft = true;
 		while(topRight && tempRow > 0 && tempCol < col-1) {
@@ -213,6 +218,11 @@ public class GameBoard {
 				board[i][j] = EMPTY;
 			}
 		}
+	}
+	
+	private boolean isFull() {
+		return (redCounters + yellowCounters == col*row);
+		
 	}
 	
 	public void printBoard() {
