@@ -35,7 +35,12 @@ public class GameBoard {
 			if(board[i][col] == EMPTY) {
 				board[i][col] = (redTurn ? RED:YELLOW);
 				incrementCounters();
-				if(checkWon(i, col)) {
+				long before = System.nanoTime();
+				checkWon(row, col);
+				long after = System.nanoTime();
+				long difference = after-before;
+				System.out.println("Time taken: " + difference);
+				if(checkWinner()) {
 					gbc.endGame();
 					if(redTurn) {
 						System.out.println("RED WON");
@@ -53,6 +58,39 @@ public class GameBoard {
 			}
 		}
 		return -1;
+	}
+	
+	private boolean checkWinner() {
+	    for (int r = 0; r < row; r++) { // iterate rows, bottom to top
+	        for (int c = 0; c < col; c++) { // iterate columns, left to right
+	            int player = board[r][c];
+	            if (player == EMPTY)
+	                continue; // don't check empty slots
+
+	            if (c + 3 < col &&
+	                player == board[r][c+1] && // look right
+	                player == board[r][c+2] &&
+	                player == board[r][c+3])
+	                return true;
+	            if (r + 3 < row) {
+	                if (player == board[r+1][c] && // look up
+	                    player == board[r+2][c] &&
+	                    player == board[r+3][c])
+	                    return true;
+	                if (c + 3 < col &&
+	                    player == board[r+1][c+1] && // look up & right
+	                    player == board[r+2][c+2] &&
+	                    player == board[r+3][c+3])
+	                    return true;
+	                if (c - 3 >= 0 &&
+	                    player == board[r+1][c-1] && // look up & left
+	                    player == board[r+2][c-2] &&
+	                    player == board[r+3][c-3])
+	                    return true;
+	            }
+	        }
+	    }
+	    return false; // no winner found
 	}
 	
 	private void incrementCounters() {
